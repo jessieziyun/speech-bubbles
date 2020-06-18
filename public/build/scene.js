@@ -3,41 +3,6 @@
 import * as THREE from "../third-party/three.module.js";
 import { FresnelShader } from '../third-party/FresnelShader.js';
 
-// pass in the Scene object as an arguemnt to create a point light
-export function createPointLights(scene) {
-
-    if (scene !== undefined) {
-        const pointLight = new THREE.DirectionalLight(0xffc4f3, 0.5); // pink
-        pointLight.position.set(-10, -10, -10);
-        // const pointLight2 = new THREE.DirectionalLight(0x538258, 0.4); // green
-        // pointLight2.position.set(2, 10, 5);
-        scene.add(pointLight);
-    }
-
-    // if the argument is undefined, throw an appropriate error
-    if (scene === undefined) {
-        console.error(
-            "You are missing an argument. You must specify a scene to add the point light to"
-        );
-    }
-}
-
-// pass in the Scene object as an argument to create an ambient light
-export function createAmbientLight(scene) {
-
-    if (scene !== undefined) {
-        const ambientLight = new THREE.HemisphereLight(0x303F9F, 0x6e738f, 0.2); // ground colour is dark blue, sky colour is a lighter blue
-        scene.add(ambientLight);
-    }
-
-    // if the argument is undefined, throw an appropriate error
-    if (scene === undefined) {
-        console.error(
-            "You are missing an argument. You must specify a scene to add the ambient light to"
-        );
-    }
-}
-
 export function createCamera(scene) {
     const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
     camera.position.set(0, 0, 350);
