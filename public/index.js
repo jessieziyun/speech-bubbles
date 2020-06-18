@@ -10,7 +10,7 @@ let video, model; // for @tensorflow/facemesh setup
 let flipHorizontal = true; // flip video so that the stream is mirrored
 let width = 0, height = 0; // initial values for the width and height of the video stream
 let faceGeometry; // 3D facemesh object
-let userMouth; // object containing coordinates of user mouth
+let userFace, userMouth, userLeftEar, userRightEar; // objects containing coordinates of user face positions
 let bubbles; // to store an array containing bubble objects
 let soundArray = []; // to store an array containing the two most recent sound values
 let mic, sound, start, end; // audio stream variables
@@ -19,6 +19,7 @@ let count = 0; // to loop through the bubble objects array
 const numberOfBubbles = 3;
 let audioChunks = [];
 let audioArray = [];
+
 
 const landingPage = document.getElementById("landing-page"); // landing page div
 const loadingScreen = document.getElementById("loading-screen"); // loading screen div
@@ -85,8 +86,11 @@ async function init(audioCtx, analyser) {
   renderer.setAnimationLoop(() => {
     detect(video, model)
       .then(predictions => {
-        // draw face mesh and get user mouth tracking point
-        userMouth = drawFace(predictions);
+        // draw face mesh and get tracking points
+        userFace = drawFace(predictions);
+        userMouth = userFace.mouth;
+        userLeftEar = userFace.leftEar;
+        userRightEar = userFace.rightEar;
 
         // process microphone stream
         mic = Media.getSound(analyser, soundArray, 100);
@@ -97,22 +101,22 @@ async function init(audioCtx, analyser) {
         // if the start of a sound input is detected, initialise a bubble
         if (start) {
           audioRecorder.start();
-          console.log(`Start of sound input \nRecorder: ${audioRecorder.state}`);
+          // console.log(`Start of sound input \nRecorder: ${audioRecorder.state}`);
         }
         // if sound is being detected, increase bubble size logarithmically
         if (sound) {
           audioRecorder.ondataavailable = (e) => {
             audioChunks.push(e.data);
           }
-          console.log("Sound being received and recorded");
-          scale = Math.log(x + 1) * 30;
+          // console.log("Sound being received and recorded");
+          scale = Math.log(x + 1) * 20;
           bubbles[count].update(scale, userMouth);
           x++;
         }
         // if the sound input ends, release the bubble
         if (end) {
           audioRecorder.stop();
-          console.log(`End of sound input \nRecorder: ${audioRecorder.state}`);
+          // console.log(`End of sound input \nRecorder: ${audioRecorder.state}`);
           const audio = document.createElement('audio');
           const blob = new Blob(audioChunks, {
             'type': 'audio/ogg; codecs=opus'
@@ -123,16 +127,21 @@ async function init(audioCtx, analyser) {
           if (audioArray.length > numberOfBubbles) {
             audioArray.splice(0, audioArray.length - numberOfBubbles);
           }
-          console.log(audioArray);
           scale = 0;
           x = 0;
           count++;
           if (count === bubbles.length) count = 0;
         }
-
         // render all the bubbles
         for (let i = 0; i < bubbles.length; i++) {
           bubbles[i].display();
+          let bubblePosition = bubbles[i].position;
+          let bubbleRadius = bubbles[i].scale.x;
+          let distanceToLeftEar = userLeftEar.position.distanceTo(bubblePosition);
+          let distanceToRightEar = userRightEar.position.distanceTo(bubblePosition);
+          if (distanceToLeftEar < bubbleRadius || distanceToRightEar < bubbleRadius) {
+            audioArray[i].play();
+          } 
         }
       })
       .catch(err => console.error(err));
@@ -159,7 +168,9 @@ function drawFace(predictions) {
   if (predictions.length > 0) {
     faceGeometry.update(predictions[0], flipHorizontal);
     let mouth = faceGeometry.track(38, 268, 15);
-    return mouth;
+    let rightEar = faceGeometry.track(234, 93, 137);
+    let leftEar = faceGeometry.track(453, 323, 366);
+    return {mouth, leftEar, rightEar};
   }
 }
 
