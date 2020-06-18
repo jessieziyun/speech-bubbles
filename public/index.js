@@ -16,8 +16,9 @@ let soundArray = []; // to store an array containing the two most recent sound v
 let mic, sound, start, end; // audio stream variables
 let scale, x; // to manipulate size of bubble objects
 let count = 0; // to loop through the bubble objects array
-const numberOfBubbles = 10;
+const numberOfBubbles = 3;
 let audioChunks = [];
+let audioArray = [];
 
 const landingPage = document.getElementById("landing-page"); // landing page div
 const loadingScreen = document.getElementById("loading-screen"); // loading screen div
@@ -118,6 +119,11 @@ async function init(audioCtx, analyser) {
           });
           const audioURL = URL.createObjectURL(blob);
           audio.src = audioURL;
+          audioArray.push(audio);
+          if (audioArray.length > numberOfBubbles) {
+            audioArray.splice(0, audioArray.length - numberOfBubbles);
+          }
+          console.log(audioArray);
           scale = 0;
           x = 0;
           count++;
