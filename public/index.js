@@ -17,6 +17,7 @@ let mic, sound, start, end; // audio stream variables
 let scale, x; // to manipulate size of bubble objects
 let count = 0; // to loop through the bubble objects array
 const numberOfBubbles = 10;
+let audioChunks = [];
 
 const landingPage = document.getElementById("landing-page"); // landing page div
 const loadingScreen = document.getElementById("loading-screen"); // loading screen div
@@ -99,6 +100,9 @@ async function init(audioCtx, analyser) {
         }
         // if sound is being detected, increase bubble size logarithmically
         if (sound) {
+          audioRecorder.ondataavailable = (e) => {
+            audioChunks.push(e.data);
+          }
           console.log("Sound being received and recorded");
           scale = Math.log(x + 1) * 30;
           bubbles[count].update(scale, userMouth);
@@ -108,6 +112,12 @@ async function init(audioCtx, analyser) {
         if (end) {
           audioRecorder.stop();
           console.log(`End of sound input \nRecorder: ${audioRecorder.state}`);
+          const audio = document.createElement('audio');
+          const blob = new Blob(audioChunks, {
+            'type': 'audio/ogg; codecs=opus'
+          });
+          const audioURL = URL.createObjectURL(blob);
+          audio.src = audioURL;
           scale = 0;
           x = 0;
           count++;
