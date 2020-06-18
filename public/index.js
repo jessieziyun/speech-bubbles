@@ -16,7 +16,7 @@ let soundArray = []; // to store an array containing the two most recent sound v
 let mic, sound, start, end; // audio stream variables
 let scale, x; // to manipulate size of bubble objects
 let count = 0; // to loop through the bubble objects array
-const numberOfBubbles = 3;
+const numberOfBubbles = 10;
 let audioChunks = [];
 let audioArray = [];
 
