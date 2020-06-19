@@ -20,6 +20,7 @@ let audioChunks = []; // array of audio chunks that make up an audio recording
 let audioArray = []; // array of recorded audio stored in bubbles
 let distanceArray = []; // two most recent values for distance between user ears and bubbles
 const numberOfBubbles = 10; // maximum number of bubbles to be displayed at any one time
+const threshold = 80; // minimum volume at which sound=true
 
 const landingPage = document.getElementById("landing-page"); // landing page div
 const loadingScreen = document.getElementById("loading-screen"); // loading screen div
@@ -94,7 +95,7 @@ async function init(audioCtx, analyser) {
         userRightEar = userFace.rightEar;
 
         // process microphone stream
-        mic = Media.getSound(analyser, soundArray, 100);
+        mic = Media.getSound(analyser, soundArray, threshold);
         start = mic.soundStart;
         end = mic.soundEnd;
         sound = mic.sound;
