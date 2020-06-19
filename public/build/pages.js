@@ -10,18 +10,26 @@ export function createLandingPageText(div) {
     header.style.paddingTop = "15%";
 
     const subheading = document.createElement("h2");
-    const subheadingNode = document.createTextNode("✨ A WORK IN PROGRESS ✨");
+    const subheadingNode = document.createTextNode("✨ BLOW DIGITAL BUBBLES WITH SOUND ✨");
     subheading.appendChild(subheadingNode);
     subheading.style.color = "white";
     subheading.style.font = "20px HelveticaNeue";
     subheading.style.paddingTop = "2%";
 
     const info = document.createElement("h3");
-    const infoNode = document.createTextNode("Blow digital bubbles with sound!");
-    info.appendChild(infoNode);
+    const infoNode1 = document.createTextNode("Speak out load, sing, whistle, play the drums,");
+    const br1 = document.createElement("br");
+    const infoNode2 = document.createTextNode("or whatever you fancy to blow bubbles of sound.");
+    const br2 = document.createElement("br");
+    const infoNode3 = document.createTextNode("Place an ear within a bubble to hear the sound in it!");
+    info.appendChild(infoNode1);
+    info.appendChild(br1);
+    info.appendChild(infoNode2);
+    info.appendChild(br2);
+    info.appendChild(infoNode3);
     info.style.color = "white";
     info.style.font = "20px HelveticaNeue";
-    info.style.paddingBottom = "2%";
+    info.style.paddingBottom = "1.5%";
 
     const request = document.createElement("p");
     const requestNode = document.createTextNode(
@@ -29,9 +37,8 @@ export function createLandingPageText(div) {
     );
     request.appendChild(requestNode);
     request.style.color = "#ffef9e";
-    // request.style.opacity = "50%";
     request.style.font = "14px HelveticaNeue-Light";
-    request.style.verticalAlign = "baseline";
+    request.style.paddingBottom = "1%";
 
     div.appendChild(header);
     div.appendChild(subheading);
@@ -44,7 +51,7 @@ export function createButton(div) {
     const button = document.createElement("button");
 
     button.style.position = "absolute";
-    button.style.bottom = "30%";
+    // button.style.bottom = "30%";
     button.style.width = "210px";
     button.style.left = "calc(50% - 105px)";
     button.style.border = "1px solid #fff";
