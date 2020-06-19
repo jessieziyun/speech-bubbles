@@ -16,10 +16,10 @@ let soundArray = []; // to store an array containing the two most recent sound v
 let mic, sound, start, end; // audio stream variables
 let scale, x; // to manipulate size of bubble objects
 let count = 0; // to loop through the bubble objects array
-const numberOfBubbles = 10;
 let audioChunks = [];
 let audioArray = [];
-
+let distanceArray = [];
+const numberOfBubbles = 10;
 
 const landingPage = document.getElementById("landing-page"); // landing page div
 const loadingScreen = document.getElementById("loading-screen"); // loading screen div
@@ -101,11 +101,11 @@ async function init(audioCtx, analyser) {
         // if the start of a sound input is detected, initialise a bubble
         if (start) {
           audioRecorder.start();
-          // console.log(`Start of sound input \nRecorder: ${audioRecorder.state}`);
+          console.log(`Start of sound input \nRecorder: ${audioRecorder.state}`);
         }
         // if sound is being detected, increase bubble size logarithmically
         if (sound) {
-          audioRecorder.ondataavailable = (e) => {
+          audioRecorder.ondataavailable = e => {
             audioChunks.push(e.data);
           }
           // console.log("Sound being received and recorded");
@@ -117,31 +117,28 @@ async function init(audioCtx, analyser) {
         if (end) {
           audioRecorder.stop();
           // console.log(`End of sound input \nRecorder: ${audioRecorder.state}`);
-          const audio = document.createElement('audio');
-          const blob = new Blob(audioChunks, {
-            'type': 'audio/ogg; codecs=opus'
-          });
-          const audioURL = URL.createObjectURL(blob);
-          audio.src = audioURL;
-          audioArray.push(audio);
-          if (audioArray.length > numberOfBubbles) {
-            audioArray.splice(0, audioArray.length - numberOfBubbles);
+          audioRecorder.onstop = () => {
+            const audio = document.createElement('audio');
+            const blob = new Blob(audioChunks, {
+                'type': 'audio/ogg; codecs=opus'
+            });
+            const audioURL = URL.createObjectURL(blob);
+            audio.src = audioURL;
+            audioArray.push(audio);
+            if (audioArray.length > numberOfBubbles) {
+                audioArray.splice(0, audioArray.length - numberOfBubbles);
+            }
           }
-          scale = 0;
-          x = 0;
-          count++;
-          if (count === bubbles.length) count = 0;
+          reset(scale, x, count, bubbles);
         }
         // render all the bubbles
         for (let i = 0; i < bubbles.length; i++) {
           bubbles[i].display();
-          let bubblePosition = bubbles[i].position;
-          let bubbleRadius = bubbles[i].scale.x;
-          let distanceToLeftEar = userLeftEar.position.distanceTo(bubblePosition);
-          let distanceToRightEar = userRightEar.position.distanceTo(bubblePosition);
-          if (distanceToLeftEar < bubbleRadius || distanceToRightEar < bubbleRadius) {
+          console.log("reached");
+          let withinBounds = checkWithinBounds(i, bubbles, userLeftEar, userRightEar, distanceArray);
+          if (withinBounds === true) {
             audioArray[i].play();
-          } 
+          }
         }
       })
       .catch(err => console.error(err));
@@ -172,6 +169,40 @@ function drawFace(predictions) {
     let leftEar = faceGeometry.track(453, 323, 366);
     return {mouth, leftEar, rightEar};
   }
+}
+
+function reset(scale, x, count, bubbles) {
+  scale = 0;
+  x = 0;
+  count++;
+  if (count === bubbles.length) count = 0;
+}
+
+function checkWithinBounds(i, bubbles, userLeftEar, userRightEar, distanceArray) {
+  let withinBubble;
+  let enteredBubble;
+  let bubblePosition = bubbles[i].position;
+  let bubbleRadius = bubbles[i].scale.x;
+  let distanceToLeftEar = userLeftEar.position.distanceTo(bubblePosition);
+  let distanceToRightEar = userRightEar.position.distanceTo(bubblePosition);
+  if (distanceToLeftEar < bubbleRadius || distanceToRightEar < bubbleRadius) {
+    withinBubble = true;
+  } else {
+    withinBubble = false;
+  }
+
+  distanceArray.push(withinBubble);
+  if (distanceArray.length > 2) {
+    distanceArray.splice(0, distanceArray.length - 2);
+  }
+
+  if (distanceArray[0] === false && distanceArray[1] === true) {
+    enteredBubble = true;
+  } else {
+    enteredBubble = false;
+  }
+
+  return enteredBubble;
 }
 
 // make sure the sketch fits the dimensions of the client browser window
