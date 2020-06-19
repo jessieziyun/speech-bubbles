@@ -10,10 +10,10 @@ const server = http.createServer(app);
 
 const io = socket.listen(server);
 
-app.use(process.env.PATH, express.static("public"));
+app.use(process.env.BASE, express.static("public"));
 
 // https://expressjs.com/en/starter/basic-routing.html
-app.get(process.env.PATH, (request, response) => {
+app.get(process.env.BASE, (request, response) => {
     response.sendFile(__dirname + "/views/index.html");
 });
 
