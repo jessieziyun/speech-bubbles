@@ -17,13 +17,6 @@ export function createFaceObject(scene, width, height) {
         wireframe: true,
     });
 
-    // to use this, would need to adapt face.js to give 3d geometry instead of plane: duplicate all points and set them a select nuumber of pixels back? Not sure if I have time/skills for this, but would definitely be cool.
-    const transparentMaterial = new THREE.ShaderMaterial( {
-        uniforms: uniforms,
-        vertexShader: shader.vertexShader,
-        fragmentShader: shader.fragmentShader
-    } );
-
     const faceMesh = new THREE.Mesh(faceGeometry, wireframeMaterial);
     scene.add(faceMesh);
     return faceGeometry;
