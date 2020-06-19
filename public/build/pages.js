@@ -29,6 +29,7 @@ export function createLandingPageText(div) {
     info.appendChild(infoNode3);
     info.style.color = "white";
     info.style.font = "20px HelveticaNeue";
+    info.style.lineHeight = "1.4";
     info.style.paddingBottom = "1.5%";
 
     const request = document.createElement("p");
@@ -38,7 +39,7 @@ export function createLandingPageText(div) {
     request.appendChild(requestNode);
     request.style.color = "#ffef9e";
     request.style.font = "14px HelveticaNeue-Light";
-    request.style.paddingBottom = "1%";
+    request.style.paddingBottom = "1.5%";
 
     div.appendChild(header);
     div.appendChild(subheading);
@@ -51,7 +52,6 @@ export function createButton(div) {
     const button = document.createElement("button");
 
     button.style.position = "absolute";
-    // button.style.bottom = "30%";
     button.style.width = "210px";
     button.style.left = "calc(50% - 105px)";
     button.style.border = "1px solid #fff";
@@ -60,7 +60,6 @@ export function createButton(div) {
     button.style.color = "#fff";
     button.style.background = "rgba(0,0,0,0.1)";
     button.style.font = "14px Helvetica";
-    // button.style.opacity = "0.5";
     button.style.cursor = "pointer";
     button.textContent = "ENTER SKETCH";
 
