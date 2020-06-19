@@ -16,10 +16,10 @@ let soundArray = []; // to store an array containing the two most recent sound v
 let mic, sound, start, end; // audio stream variables
 let scale, x; // to manipulate size of bubble objects
 let count = 0; // to loop through the bubble objects array
-let audioChunks = [];
-let audioArray = [];
-let distanceArray = [];
-const numberOfBubbles = 10;
+let audioChunks = []; // array of audio chunks that make up an audio recording
+let audioArray = []; // array of recorded audio stored in bubbles
+let distanceArray = []; // two most recent values for distance between user ears and bubbles
+const numberOfBubbles = 10; // maximum number of bubbles to be displayed at any one time
 
 const landingPage = document.getElementById("landing-page"); // landing page div
 const loadingScreen = document.getElementById("loading-screen"); // loading screen div
@@ -57,6 +57,7 @@ async function init(audioCtx, analyser) {
     Pages.hideDiv(loadingScreen);
   });
 
+  // create an audio recorder
   const audioRecorder = Media.createAudioRecorder();
 
   // scene setup
@@ -98,25 +99,22 @@ async function init(audioCtx, analyser) {
         end = mic.soundEnd;
         sound = mic.sound;
 
-        // if the start of a sound input is detected, initialise a bubble
+        // if the start of a sound input is detected, start the audio recorder
         if (start) {
           audioRecorder.start();
-          console.log(`Start of sound input \nRecorder: ${audioRecorder.state}`);
         }
-        // if sound is being detected, increase bubble size logarithmically
+        // if sound is being detected, increase bubble size logarithmically and record the sound
         if (sound) {
           audioRecorder.ondataavailable = e => {
             audioChunks.push(e.data);
           }
-          // console.log("Sound being received and recorded");
           scale = Math.log(x + 1) * 20;
           bubbles[count].update(scale, userMouth);
           x++;
         }
-        // if the sound input ends, release the bubble
+        // if the sound input ends, release the bubble and stop the audio recorder
         if (end) {
           audioRecorder.stop();
-          // console.log(`End of sound input \nRecorder: ${audioRecorder.state}`);
           audioRecorder.onstop = () => {
             const audio = document.createElement('audio');
             const blob = new Blob(audioChunks, {
@@ -129,12 +127,16 @@ async function init(audioCtx, analyser) {
                 audioArray.splice(0, audioArray.length - numberOfBubbles);
             }
           }
-          reset(scale, x, count, bubbles);
+          // reset scale variables for next bubble
+          scale = 0;
+          x = 0;
+          // advance to next bubble in the array
+          count++;
+          if (count === bubbles.length) count = 0;
         }
         // render all the bubbles
         for (let i = 0; i < bubbles.length; i++) {
           bubbles[i].display();
-          console.log("reached");
           let withinBounds = checkWithinBounds(i, bubbles, userLeftEar, userRightEar, distanceArray);
           if (withinBounds === true) {
             audioArray[i].play();
@@ -171,37 +173,23 @@ function drawFace(predictions) {
   }
 }
 
-function reset(scale, x, count, bubbles) {
-  scale = 0;
-  x = 0;
-  count++;
-  if (count === bubbles.length) count = 0;
-}
-
+// check if either of the user's ears have entered a bubble
 function checkWithinBounds(i, bubbles, userLeftEar, userRightEar, distanceArray) {
   let withinBubble;
   let enteredBubble;
+
+  // find distance between centre of bubble and user ears
   let bubblePosition = bubbles[i].position;
   let bubbleRadius = bubbles[i].scale.x;
   let distanceToLeftEar = userLeftEar.position.distanceTo(bubblePosition);
   let distanceToRightEar = userRightEar.position.distanceTo(bubblePosition);
-  if (distanceToLeftEar < bubbleRadius || distanceToRightEar < bubbleRadius) {
-    withinBubble = true;
-  } else {
-    withinBubble = false;
-  }
-
+  
+  // if either ear has entered the radius of a bubble, enteredBubble is true
+  distanceToLeftEar < bubbleRadius || distanceToRightEar < bubbleRadius ? withinBubble = true : withinBubble = false
   distanceArray.push(withinBubble);
-  if (distanceArray.length > 2) {
-    distanceArray.splice(0, distanceArray.length - 2);
-  }
-
-  if (distanceArray[0] === false && distanceArray[1] === true) {
-    enteredBubble = true;
-  } else {
-    enteredBubble = false;
-  }
-
+  if (distanceArray.length > 2) distanceArray.splice(0, distanceArray.length - 2);
+  distanceArray[0] === false && distanceArray[1] === true ? enteredBubble = true : enteredBubble = false;
+  
   return enteredBubble;
 }
 
