@@ -5,8 +5,6 @@ import * as Pages from "./build/pages.js"; // Contains code regarding the landin
 import * as Media from "./build/media.js"; // Code related to user media: getting and processing webcam/microphone streams
 import { createFaceObject, createBubbles } from "./build/tracker.js"; // code for the objects that populate the scene: face mesh and bubbles
 
-let container, scene, textureCube, camera, renderer, controls; // Three.js scene setup
-let video, model; // for @tensorflow/facemesh setup
 let flipHorizontal = true; // flip video so that the stream is mirrored
 let width = 0, height = 0; // initial values for the width and height of the video stream
 let faceGeometry; // 3D facemesh object
@@ -21,6 +19,7 @@ let audioArray = []; // array of recorded audio stored in bubbles
 let distanceArray = []; // two most recent values for distance between user ears and bubbles
 const numberOfBubbles = 10; // maximum number of bubbles to be displayed at any one time
 const threshold = 80; // minimum volume at which sound=true
+const bubbleRadiusSF = 15; // scale factor for increasing bubble radius
 
 const landingPage = document.getElementById("landing-page"); // landing page div
 const loadingScreen = document.getElementById("loading-screen"); // loading screen div
@@ -46,29 +45,28 @@ function main() {
 
 async function init(audioCtx, analyser) {
 
+  // scene setup
+  const container = document.querySelector("#scene-container");
+  const scene = new THREE.Scene();
+  const textureCube = SceneSetup.createCubeMapTexture().textureCube;
+  scene.background = textureCube;
+  const camera = SceneSetup.createCamera(scene);
+  const renderer = SceneSetup.createRenderer(container, width, height);
+  const controls = new OrbitControls(camera, renderer.domElement);
+
   // initialise video and audio streams
   try {
-    video = await Media.loadStream(audioCtx, analyser);
+    const video = await Media.loadStream(audioCtx, analyser);
   } catch (err) {
     throw err;
   }
 
-  // show loading page while model is loading
-  detect(video, model).then(() => {
-    Pages.hideDiv(loadingScreen);
-  });
-
   // create an audio recorder
   const audioRecorder = Media.createAudioRecorder();
 
-  // scene setup
-  container = document.querySelector("#scene-container");
-  scene = new THREE.Scene();
-  textureCube = SceneSetup.createCubeMapTexture().textureCube;
-  scene.background = textureCube;
-  camera = SceneSetup.createCamera(scene);
-  renderer = SceneSetup.createRenderer(container, width, height);
-  controls = new OrbitControls(camera, renderer.domElement);
+  // initialise facemesh
+  const model = await facemesh.load({ maxFaces: 1 });
+  Pages.hideDiv(loadingScreen);
 
   // create user face object
   faceGeometry = createFaceObject(scene, width, height);
@@ -80,7 +78,7 @@ async function init(audioCtx, analyser) {
     const h = video.videoHeight;
     width = w;
     height = h;
-    resize();
+    resize(camera, renderer);
     faceGeometry.setSize(w, h);
   }
 
@@ -109,7 +107,7 @@ async function init(audioCtx, analyser) {
           audioRecorder.ondataavailable = e => {
             audioChunks.push(e.data);
           }
-          scale = Math.log(x + 1) * 20;
+          scale = Math.log(x + 1) * bubbleRadiusSF;
           bubbles[count].update(scale, userMouth);
           x++;
         }
@@ -150,15 +148,12 @@ async function init(audioCtx, analyser) {
 
   // if the user resizes the window, adjust everything accordingly
   window.addEventListener("resize", () => {
-    resize();
+    resize(camera, renderer);
   });
 }
 
-// @tensorflow-models/facemesh code
+// predict face coordinates
 async function detect(video, model) {
-  model = await facemesh.load({
-    maxFaces: 1
-  });
   const predictions = await model.estimateFaces(video, false, flipHorizontal);
   return predictions;
 }
@@ -195,7 +190,7 @@ function checkWithinBounds(i, bubbles, userLeftEar, userRightEar, distanceArray)
 }
 
 // make sure the sketch fits the dimensions of the client browser window
-function resize() {
+function resize(camera, renderer) {
   const videoAspectRatio = width / height;
   const windowWidth = window.innerWidth;
   const windowHeight = window.innerHeight;
