@@ -139,6 +139,7 @@ async function init(audioCtx, analyser) {
           let withinBounds = checkWithinBounds(i, bubbles, userLeftEar, userRightEar, distanceArray);
           if (withinBounds === true) {
             audioArray[i].play();
+            continue;
           }
         }
       })
