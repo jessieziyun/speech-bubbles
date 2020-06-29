@@ -1,16 +1,16 @@
 // SERVER CODE
-
+require("dotenv").config()
 const express = require("express");
 const http = require("http");
 
 const app = express();
-const port = process.env.PORT || 4027;
+const port = process.env.PORT || 3000;
 const server = http.createServer(app);
 
-app.use(express.static("public"));
+app.use(process.env.BASE, express.static("public"));
 
 // https://expressjs.com/en/starter/basic-routing.html
-app.get("/", (request, response) => {
+app.get(process.env.BASE, (request, response) => {
     response.sendFile(__dirname + "/views/index.html");
 });
 
