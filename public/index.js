@@ -22,7 +22,9 @@ const threshold = 80; // minimum volume at which sound=true
 const bubbleRadiusSF = 15; // scale factor for increasing bubble radius
 
 const landingPage = document.getElementById("landing-page"); // landing page div
+const landingPageBg = document.getElementById("landing-bg"); // landing page background image
 const loadingScreen = document.getElementById("loading-screen"); // loading screen div
+const loadingScreenBg = document.getElementById("loading-bg"); // loading screen background image
 
 function main() {
 
@@ -32,7 +34,7 @@ function main() {
   const button = Pages.createButton(landingPage);
 
   // if the "enter" button is pressed, start the sketch
-  Pages.buttonPressed(button, landingPage).then((clicked) => {
+  Pages.buttonPressed(button, landingPage, landingPageBg).then((clicked) => {
     console.log("clicked");
     if (clicked === true) {
       const audioCtx = new(window.AudioContext || window.webkitAudioContext)();
@@ -67,6 +69,7 @@ async function init(audioCtx, analyser) {
   // initialise facemesh
   const model = await facemesh.load({ maxFaces: 1 });
   Pages.hideDiv(loadingScreen);
+  Pages.hideDiv(loadingScreenBg);
 
   // create user face object
   faceGeometry = createFaceObject(scene, width, height);

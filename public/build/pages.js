@@ -3,48 +3,36 @@
 // create text elements for the landing page
 export function createLandingPageText(div) {
     const header = document.createElement("h1");
-    const headerNode = document.createTextNode("S_P_E_E_C_H__B_U_B_B_L_E_S");
+    const headerNode = document.createTextNode("SPEECH BUBBLES");
     header.appendChild(headerNode);
     header.style.color = "#ffef9e";
     header.style.font = "32px HelveticaNeue-Italic";
-    header.style.paddingTop = "15%";
+    header.style.letterSpacing = "50px";
+    header.style.lineHeight = "50px";
+    // header.style.paddingTop = "15%";
 
     const subheading = document.createElement("h2");
-    const subheadingNode = document.createTextNode("✨ BLOW DIGITAL BUBBLES WITH SOUND ✨");
+    const subheadingNode = document.createTextNode("BLOW DIGITAL BUBBLES WITH SOUND");
     subheading.appendChild(subheadingNode);
     subheading.style.color = "white";
     subheading.style.font = "20px HelveticaNeue";
-    subheading.style.paddingTop = "2%";
+    subheading.style.letterSpacing= "50px";
+    subheading.style.lineHeight = "50px";
+    subheading.style.marginTop = "75px";
 
     const info = document.createElement("h3");
-    const infoNode1 = document.createTextNode("Speak out load, sing, whistle, play the drums,");
-    const br1 = document.createElement("br");
-    const infoNode2 = document.createTextNode("or whatever you fancy to blow bubbles of sound.");
-    const br2 = document.createElement("br");
-    const infoNode3 = document.createTextNode("Place an ear within a bubble to hear the sound in it!");
-    info.appendChild(infoNode1);
-    info.appendChild(br1);
-    info.appendChild(infoNode2);
-    info.appendChild(br2);
-    info.appendChild(infoNode3);
-    info.style.color = "white";
+    const infoNode = document.createTextNode("Please allow access to the camera and microphone to view. Place an ear within a bubble to hear the sound in it!");
+    info.appendChild(infoNode);
+    info.style.color = "#ffef9e";
     info.style.font = "20px HelveticaNeue";
-    info.style.lineHeight = "1.4";
-    info.style.paddingBottom = "1.5%";
-
-    const request = document.createElement("p");
-    const requestNode = document.createTextNode(
-        "Please allow the browser to access the camera and microphone and disable your adblocker to view."
-    );
-    request.appendChild(requestNode);
-    request.style.color = "#ffef9e";
-    request.style.font = "14px HelveticaNeue-Light";
-    request.style.paddingBottom = "1.5%";
+    info.style.letterSpacing= "10px";
+    info.style.lineHeight = "40px";
+    info.style.marginTop = "75px";
+    info.style.marginBottom = "75px";
 
     div.appendChild(header);
     div.appendChild(subheading);
     div.appendChild(info);
-    div.appendChild(request);
 }
 
 // create "enter sketch" button
@@ -52,16 +40,17 @@ export function createButton(div) {
     const button = document.createElement("button");
 
     button.style.position = "absolute";
-    button.style.width = "210px";
-    button.style.left = "calc(50% - 105px)";
+    button.style.width = "300px";
+    button.style.left = "calc(50% - 150px)";
     button.style.border = "1px solid #fff";
     button.style.borderRadius = "4px";
     button.style.padding = "12px 6px";
     button.style.color = "#fff";
-    button.style.background = "rgba(0,0,0,0.1)";
+    button.style.background = "none";
     button.style.font = "14px Helvetica";
     button.style.cursor = "pointer";
     button.textContent = "ENTER SKETCH";
+    button.style.letterSpacing= "10px";
 
     button.onmouseenter = () => {
         button.style.color = "#ffef9e";
@@ -78,10 +67,11 @@ export function createButton(div) {
 }
 
 // if the button is pressed, hide the div
-export function buttonPressed(button, div) {
+export function buttonPressed(button, div, bg) {
     return new Promise(resolve => {
         button.onclick = () => {
             hideDiv(div);
+            hideDiv(bg);
             let clicked = true;
             resolve(clicked);
         };
@@ -99,10 +89,11 @@ export function hideDiv(div) {
 // create the loading screen
 export function createLoadingScreen(div) {
     const loadingText = document.createElement("h1");
-    const textNode = document.createTextNode("M_O_D_E_L__L_O_A_D_I_N_G");
+    const textNode = document.createTextNode("MODEL LOADING");
     loadingText.appendChild(textNode);
     loadingText.style.color = "#ffef9e";
     loadingText.style.font = "24px HelveticaNeue-Italic";
-    loadingText.style.paddingTop = "22%";
+    loadingText.style.letterSpacing= "50px";
+    loadingText.style.lineHeight = "50px";
     div.appendChild(loadingText);
 }
