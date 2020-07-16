@@ -6,16 +6,18 @@ export function createLandingPageText(div) {
     const headerNode = document.createTextNode("SPEECH BUBBLES");
     header.appendChild(headerNode);
     header.style.color = "#ffef9e";
-    header.style.font = "32px HelveticaNeue-Italic";
+    header.style.fontSize = "32px";
+    header.style.fontWeight = "lighter";
+    header.style.fontStyle = "italic";
     header.style.letterSpacing = "50px";
     header.style.lineHeight = "50px";
-    // header.style.paddingTop = "15%";
 
     const subheading = document.createElement("h2");
     const subheadingNode = document.createTextNode("BLOW DIGITAL BUBBLES WITH SOUND");
     subheading.appendChild(subheadingNode);
     subheading.style.color = "white";
-    subheading.style.font = "20px HelveticaNeue";
+    subheading.style.fontSize = "20px";
+    subheading.style.fontWeight = "lighter";
     subheading.style.letterSpacing= "50px";
     subheading.style.lineHeight = "50px";
     subheading.style.marginTop = "75px";
@@ -24,9 +26,10 @@ export function createLandingPageText(div) {
     const infoNode = document.createTextNode("Please allow access to the camera and microphone to view. Place an ear within a bubble to hear the sound in it!");
     info.appendChild(infoNode);
     info.style.color = "#ffef9e";
-    info.style.font = "20px HelveticaNeue";
+    info.style.fontSize = "20px";
+    info.style.fontWeight = "lighter";
     info.style.letterSpacing= "10px";
-    info.style.lineHeight = "40px";
+    info.style.lineHeight = "35px";
     info.style.marginTop = "75px";
     info.style.marginBottom = "75px";
 
@@ -92,7 +95,9 @@ export function createLoadingScreen(div) {
     const textNode = document.createTextNode("MODEL LOADING");
     loadingText.appendChild(textNode);
     loadingText.style.color = "#ffef9e";
-    loadingText.style.font = "24px HelveticaNeue-Italic";
+    loadingText.style.fontSize = "24px";
+    loadingText.style.fontWeight = "lighter";
+    loadingText.style.fontStyle = "italic";
     loadingText.style.letterSpacing= "50px";
     loadingText.style.lineHeight = "50px";
     div.appendChild(loadingText);

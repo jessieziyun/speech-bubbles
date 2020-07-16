@@ -1,3 +1,5 @@
+@import url("https://use.typekit.net/apc2ueg.css");
+
 html {
     margin: 0px;
     padding: 0px;
@@ -8,6 +10,9 @@ body {
     padding: 0px;
     background-color: #000;
     overflow: hidden;
+    font-family: neue-haas-grotesk-text, sans-serif;
+    font-weight: 400;
+    font-style: normal;
 }
 
 #scene-container {
