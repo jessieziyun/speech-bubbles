@@ -43,16 +43,16 @@ export function createButton(div) {
     const button = document.createElement("button");
 
     button.style.position = "absolute";
-    button.style.width = "300px";
-    button.style.left = "calc(50% - 150px)";
+    button.style.width = "200px";
+    button.style.left = "calc(50% - 100px)";
     button.style.border = "1px solid #fff";
     button.style.borderRadius = "4px";
-    button.style.padding = "12px 6px";
+    button.style.padding = "12px 0px 12px 12px";
     button.style.color = "#fff";
     button.style.background = "none";
-    button.style.font = "14px Helvetica";
+    button.style.font = "18px Helvetica";
     button.style.cursor = "pointer";
-    button.textContent = "ENTER SKETCH";
+    button.textContent = "ENTER";
     button.style.letterSpacing= "10px";
 
     button.onmouseenter = () => {
