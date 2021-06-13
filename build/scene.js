@@ -37,7 +37,7 @@ export function createRenderer(container, width, height) {
 }
 
 export function createCubeMapTexture(){
-    const path = "../textures/";
+    const path = "./build/textures/";
     const format = '.jpg';
     const urls = [
         path + 'posx' + format, path + 'negx' + format,

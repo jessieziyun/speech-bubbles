@@ -49,7 +49,7 @@ body {
     width: 100%;
     height: 100%;
     text-align: center;
-    background-image: url("./textures/posy.jpg");
+    background-image: url("./build/textures/posy.jpg");
 }
 
 #loading-bg {
@@ -58,5 +58,5 @@ body {
     width: 100%;
     height: 100%;
     text-align: center;
-    background-image: url("./textures/posy.jpg");
+    background-image: url("./build/textures/posy.jpg");
 }

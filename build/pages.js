@@ -82,11 +82,10 @@ export function createLoadingScreen(div) {
     const loadingText = document.createElement("h1");
     const textNode = document.createTextNode("MODEL LOADING");
     loadingText.appendChild(textNode);
-    loadingText.style.color = "#ffef9e";
     loadingText.style.fontSize = "24px";
     loadingText.style.fontWeight = "lighter";
     loadingText.style.fontStyle = "italic";
-    loadingText.style.letterSpacing= "50px";
+    loadingText.style.letterSpacing= "5px";
     loadingText.style.lineHeight = "50px";
     div.appendChild(loadingText);
 }
