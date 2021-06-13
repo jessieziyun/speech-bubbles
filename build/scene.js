@@ -1,7 +1,7 @@
 // THREE.JS SCENE SETUP
 
-import * as THREE from "../third-party/three.module.js";
-import { FresnelShader } from '../third-party/FresnelShader.js';
+import * as THREE from "../build/three.module.js";
+import { FresnelShader } from '../build/FresnelShader.js';
 
 export function createCamera(scene) {
     const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
@@ -37,7 +37,7 @@ export function createRenderer(container, width, height) {
 }
 
 export function createCubeMapTexture(){
-    const path = "third-party/textures/";
+    const path = "../textures/";
     const format = '.jpg';
     const urls = [
         path + 'posx' + format, path + 'negx' + format,

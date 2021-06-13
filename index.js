@@ -1,5 +1,4 @@
-import * as THREE from "./third-party/three.module.js"; // using Three.js to create 3D scene and objects
-import { OrbitControls } from "./third-party/OrbitControls.js"; // Orbit Controls allow navigation with the mouse and trackpad
+import * as THREE from "./build/three.module.js"; // using Three.js to create 3D scene and objects
 import * as SceneSetup from "./build/scene.js"; // All my Three.js scene setup code is in here
 import * as Pages from "./build/pages.js"; // Contains code regarding the landing page and loading screen of the webpage
 import * as Media from "./build/media.js"; // Code related to user media: getting and processing webcam/microphone streams
@@ -54,7 +53,6 @@ async function init(audioCtx, analyser) {
   scene.background = textureCube;
   const camera = SceneSetup.createCamera(scene);
   const renderer = SceneSetup.createRenderer(container, width, height);
-  const controls = new OrbitControls(camera, renderer.domElement);
 
   // initialise video and audio streams
   try {

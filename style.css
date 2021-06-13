@@ -10,9 +10,10 @@ body {
     padding: 0px;
     background-color: #000;
     overflow: hidden;
-    font-family: neue-haas-grotesk-text, sans-serif;
+    font-family: Helvetica, sans-serif;
     font-weight: 400;
     font-style: normal;
+    color: white;
 }
 
 #scene-container {
@@ -48,7 +49,7 @@ body {
     width: 100%;
     height: 100%;
     text-align: center;
-    background-image: url("third-party/textures/posy.jpg");
+    background-image: url("./textures/posy.jpg");
 }
 
 #loading-bg {
@@ -57,5 +58,5 @@ body {
     width: 100%;
     height: 100%;
     text-align: center;
-    background-image: url("third-party/textures/posy.jpg");
+    background-image: url("./textures/posy.jpg");
 }

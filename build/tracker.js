@@ -1,7 +1,7 @@
 // FACEMESH AND BUBBLES CODE
 
-import * as THREE from "../third-party/three.module.js";
-import { FaceMeshFaceGeometry } from "../third-party/face.js";
+import * as THREE from "../build/three.module.js";
+import { FaceMeshFaceGeometry } from "../build/face.js";
 import { createCubeMapTexture } from "./scene.js"
 
 const cubemaptexture = createCubeMapTexture();
