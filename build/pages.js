@@ -22,12 +22,12 @@ export function createLandingPageText(div) {
     subheading.style.marginTop = "20px";
 
     const info = document.createElement("h3");
-    const infoNode = document.createTextNode("Please allow access to the camera and microphone to view. \nPlace an ear within a bubble to hear the sound in it!");
+    const infoNode = document.createTextNode("Please use headphones.\n\nAllow access to the camera and microphone to view.\nPlace an ear within a bubble to hear the sound in it!");
     info.appendChild(infoNode);
     info.style.fontSize = "18px";
     info.style.fontWeight = "200";
     info.style.lineHeight = "1.2em";
-    info.style.marginTop = "10vh";
+    info.style.marginTop = "20px";
     info.style.marginBottom = "30px";
     info.style.whiteSpace = "pre";
 
